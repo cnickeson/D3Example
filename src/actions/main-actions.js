@@ -9,7 +9,7 @@ export const getData = () => {
   }
 }
 
-export const barClickedType = "BAR_CLICKED_TYPE";
-export const barClicked = (key, cid) => {
-  return { type: barClickedType, payload: { key, cid } };
+export const edgeClickedType = "BAR_CLICKED_TYPE";
+export const edgeClicked = (cid) => {
+  return { type: edgeClickedType, payload: { cid } };
 }

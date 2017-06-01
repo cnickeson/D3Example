@@ -1,9 +1,10 @@
-import { getDataType, barClickedType } from '../actions/main-actions';
+import { getDataType, edgeClickedType } from '../actions/main-actions';
 import uniqueId from 'lodash/uniqueId';
 
 let initialState = {
   loading: true,
-  data: {}
+  nodes: [],
+  edges: []
 };
 
 const mainReducer = (state = initialState, action) => {
@@ -13,19 +14,17 @@ const mainReducer = (state = initialState, action) => {
       //Consider bringing in immutableJS
       return {
         ...state,
-        data: mapDataToChartData(nodes, edges),
+        nodes: mapNodes(nodes),
+        edges: edges.map((edge) => { return mapEdge(edge) }),
         loading: false
       }
     }
-    case barClickedType: {
-      const { key, cid } = action.payload;
-      const mappedKeyVal = state.data[key].map((val) => { return val.cid === cid ? {...val, total: val.total + 1} : { ...val } });
+    case edgeClickedType: {
+      const { cid } = action.payload;
+      const mappedEdges = state.edges.map((edge) => { return edge.cid === cid ? {...edge, total: edge.total + 1} : { ...edge } });
       return {
         ...state,
-        data: {
-          ...state.data,
-          [key]: mappedKeyVal 
-        }
+        edges: mappedEdges
       }
     }
     default:
@@ -33,17 +32,32 @@ const mainReducer = (state = initialState, action) => {
   }
 }
 
-const mapDataToChartData = (nodes, edges) => {
-  var result = {};
-  edges.forEach((edge, index) => {
-    const key = nodes[edge.source].title;
-    const destinationName = nodes[edge.destination].title;
-    if(result[key]){
-      result[key].push({cid: uniqueId('bar_'), destinationName, total: edge.total});
-    } else {
-      result[key] = [{cid: uniqueId('bar_'), destinationName, total: edge.total}];
-    }
-  });
+const randomColor = () => {
+  return `rgb(${randomNumberRange(60,255)}, ${randomNumberRange(60,255)}, ${randomNumberRange(60,255)}`;
+}
+
+const randomNumberRange = (min, max) => {
+  return Math.floor(Math.random() * (max - min) + min);
+}
+
+const mapEdge = (edge) => {
+  return { 
+    cid: uniqueId('edge_'), 
+    source: edge.source, target: 
+    edge.destination, 
+    total: edge.total,
+    color: randomColor()
+  }
+}
+
+const mapNodes = (nodes) => {
+  var result = [];
+  for(var node in nodes) {
+    result.push({
+      id: node,
+      title: nodes[node].title,
+    });
+  }
   return result;
 }
 

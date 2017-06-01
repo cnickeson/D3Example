@@ -22,3 +22,16 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+.graph-container {
+  display: inline-flex;
+}
+
+.board-container {
+  padding-top: 40px;
+}
+
+.board-item {
+  border-style: solid;
+  padding: 4px 4px 4px 10px;
+}
