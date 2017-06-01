@@ -8,7 +8,8 @@ class BoardContainer extends Component {
     const { edges } = this.props;
     return (
       <div className="board-container">
-          { edges.map((edge) => { return this.renderBoardItem(edge) }) }
+        <label>Links and Value Chart</label>
+        { edges.map((edge) => { return this.renderBoardItem(edge) }) }
       </div>
     );
   }
